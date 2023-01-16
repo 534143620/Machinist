@@ -56,6 +56,8 @@ Material:
     - Strength: 20
     - Time: 0.05
     - _Float: 20
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _RECEIVE_SHADOWS_OFF: 0
     m_Colors:
     - Direction: {r: 10, g: 10, b: 0, a: 0}

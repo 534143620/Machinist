@@ -124,12 +124,19 @@ Material:
     - Boolean_8c9ca0d8eb01493da7c19d2c85eb15eb: 1
     - Boolean_b0523346adc34c91af8a466392e41cd1: 1
     - Boolean_cf6c3701851a4241a6a2fdd166392aa5: 0
+    - Brightness: 1
+    - ClearCoat: 0
+    - ClearCoatSmoothness: 1
     - DissolveEdgeWidth: 0.5
     - DissolveScale: 100
     - Dissolve_Width: 10
     - Edge_Width: 0.5
+    - Fresnel: 10
     - Height: 12
+    - Metallic: 1
     - Scale: 100
+    - Smoothness: 1
+    - Use_Fresnel: 0
     - Vector1_11828729941c42e482e8e129a5b5088b: 0
     - Vector1_1e7704ebd5584b06be5b311be89b08c3: 0
     - _AlphaClip: 0
@@ -150,6 +157,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 1
@@ -171,6 +179,7 @@ Material:
     - DissolveEdgeColor: {r: 29.85706, g: 0, b: 0, a: 0}
     - Edge_Color: {r: 29.85706, g: 0, b: 0, a: 0}
     - Emssion_Color: {r: 0, g: 0, b: 0, a: 1}
+    - Fresnel_Color: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 4.4367485, b: 33.89676, a: 1}

@@ -61,6 +61,8 @@ Material:
     - Scale: 15
     - ScaleSpeed: 0.000785
     - Speed: 0.848
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _offset: 0.2
     m_Colors:
     - Blink_Color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
