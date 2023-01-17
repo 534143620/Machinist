@@ -10,12 +10,24 @@ public class Character : MonoBehaviour
     private PlayerInput _playerInput;
     private float _verticalVelocity;
     public float Gravity = -9.8f;
-
     private Animator _animator;
+
+    //Enemy
+    public bool isPlayer = true;
+    private UnityEngine.AI.NavMeshAgent _navMeshAgent;
+    private Transform targetPlayer;
     private void Awake() {
         _cc = GetComponent<CharacterController>();
-        _playerInput = GetComponent<PlayerInput>();
         _animator = GetComponent<Animator>();
+        
+        if(isPlayer == false){
+            _navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+            targetPlayer = GameObject.FindWithTag("Player").transform;
+            _navMeshAgent.speed = MoveSpeed;
+        }else{
+             _playerInput = GetComponent<PlayerInput>();
+        }
+
     }
 
     private void CalculatePlayerMovement()
@@ -32,14 +44,32 @@ public class Character : MonoBehaviour
         
     }
 
-    private void FixedUpdate() {
-        CalculatePlayerMovement();
-
-        if(_cc.isGrounded == false)
-            _verticalVelocity = Gravity;
+    private void CalculateEnemyMovement()
+    {   
+        if (Vector3.Distance(targetPlayer.position,transform.position) >= _navMeshAgent.stoppingDistance)
+        {
+            _navMeshAgent.SetDestination(targetPlayer.position);
+            _animator.SetFloat("Speed",0.2f);
+        }
         else
-            _verticalVelocity = Gravity * 0.3f;
-        _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
-        _cc.Move(_movementVelocity);    
+        {
+            _navMeshAgent.SetDestination(transform.position);
+            _animator.SetFloat("Speed",0f);
+        }
+
+    }
+
+    private void FixedUpdate() {
+        if(isPlayer){
+            CalculatePlayerMovement();
+            if(_cc.isGrounded == false)
+                _verticalVelocity = Gravity;
+            else
+                _verticalVelocity = Gravity * 0.3f;
+            _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
+            _cc.Move(_movementVelocity);    
+        }
+        else
+            CalculateEnemyMovement();
     }
 }
