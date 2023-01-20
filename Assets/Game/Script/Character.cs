@@ -74,6 +74,7 @@ public class Character : MonoBehaviour
         {
             _navMeshAgent.SetDestination(transform.position);
             _animator.SetFloat("Speed",0f);
+            SwitchStateTo(CharacterState.Attacking);
         }
 
     }
@@ -116,8 +117,10 @@ public class Character : MonoBehaviour
 
     private void SwitchStateTo(CharacterState newState){
         //clear cache
-        _playerInput.MouseButtonDown = false;
-
+        if(isPlayer)
+        {
+            _playerInput.MouseButtonDown = false;
+        }
         //Exiting state
         switch (currentState)
         {
@@ -132,6 +135,11 @@ public class Character : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
+                if(!isPlayer) //敌人需要朝着玩家旋转
+                {
+                    Quaternion newRotation = Quaternion.LookRotation(targetPlayer.position - transform.position);
+                    transform.rotation = newRotation;
+                }
                 _animator.SetTrigger("Attack");
                 if(isPlayer)
                     attackStartTime = Time.time;

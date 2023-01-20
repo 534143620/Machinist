@@ -6,9 +6,17 @@ using UnityEngine.VFX;
 public class EnemyVFXManager : MonoBehaviour
 {
    public VisualEffect footStep;
+   
+   public VisualEffect AttackVFX;
+
    public void BurstFootStep()
    {    
-        //footStep.SendEvent("OnPlay"); //效果与Play相同
-        footStep.Play();
+      //footStep.SendEvent("OnPlay"); //效果与Play相同
+      footStep.Play();
+   }
+
+   public void PlayAttackVFX()
+   {
+      AttackVFX.Play();
    }
 }
