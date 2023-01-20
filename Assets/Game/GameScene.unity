@@ -295,6 +295,8 @@ MonoBehaviour:
   MoveSpeed: 2
   Gravity: -9.8
   isPlayer: 0
+  attackSlideDuration: 0.4
+  attackSlideSpeed: 0.06
   currentState: 0
 --- !u!114 &74488076
 MonoBehaviour:
@@ -1583,6 +1585,8 @@ MonoBehaviour:
   MoveSpeed: 5
   Gravity: -20
   isPlayer: 1
+  attackSlideDuration: 0.1
+  attackSlideSpeed: 1.2
   currentState: 0
 --- !u!95 &966832976
 Animator:
