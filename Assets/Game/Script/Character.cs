@@ -16,6 +16,14 @@ public class Character : MonoBehaviour
     public bool isPlayer = true;
     private UnityEngine.AI.NavMeshAgent _navMeshAgent;
     private Transform targetPlayer;
+
+    //state
+    public enum CharacterState
+    {
+        Normal,Attacking
+    }
+    public CharacterState currentState;
+
     private void Awake() {
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
@@ -32,6 +40,11 @@ public class Character : MonoBehaviour
 
     private void CalculatePlayerMovement()
     {
+        if(_playerInput.MouseButtonDown && _cc.isGrounded){
+            SwitchStateTo(CharacterState.Attacking);
+            return;
+        }
+
         _movementVelocity.Set(_playerInput.HorizontalInput,0f,_playerInput.VerticalInput);
         _movementVelocity.Normalize();
         _movementVelocity = Quaternion.Euler(0,-45f,0) * _movementVelocity; //保证跟相机的方向统一
@@ -60,8 +73,20 @@ public class Character : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        switch (currentState)
+        {
+            case CharacterState.Normal:
+                if(isPlayer)
+                    CalculatePlayerMovement();
+                else
+                    CalculateEnemyMovement();
+                break;
+            case CharacterState.Attacking:
+                //TODO
+                break;
+        }
+
         if(isPlayer){
-            CalculatePlayerMovement();
             if(_cc.isGrounded == false)
                 _verticalVelocity = Gravity;
             else
@@ -69,7 +94,39 @@ public class Character : MonoBehaviour
             _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
             _cc.Move(_movementVelocity);    
         }
-        else
-            CalculateEnemyMovement();
+    }
+
+    private void SwitchStateTo(CharacterState newState){
+        //clear cache
+        _playerInput.MouseButtonDown = false;
+
+        //Exiting state
+        switch (currentState)
+        {
+            case CharacterState.Normal:
+                break;
+            case CharacterState.Attacking:
+                break;
+        }
+        //Entering state
+        switch (newState)
+        {
+            case CharacterState.Normal:
+                break;
+            case CharacterState.Attacking:
+                _animator.SetTrigger("Attack");
+                AttackAnimationEnds();
+                break;
+        }
+
+        currentState = newState;
+
+        Debug.Log("转换状态");
+
+    }
+
+    public void AttackAnimationEnds()
+    {
+        SwitchStateTo(CharacterState.Normal);
     }
 }
