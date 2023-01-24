@@ -17,7 +17,7 @@ public class PlayerInput : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
         VerticalInput =  Input.GetAxisRaw("Vertical");
     }
-
+    
     private void OnDisable() {
         MouseButtonDown = false;
         HorizontalInput = 0;

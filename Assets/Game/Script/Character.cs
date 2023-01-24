@@ -21,8 +21,9 @@ public class Character : MonoBehaviour
     private float attackStartTime;
     public float attackSlideDuration = 0.1f;
     public float attackSlideSpeed = 1.2f;
-
-
+    //Health
+    private Health _health;
+    private DamageCaster _damageCaster;
     //state
     public enum CharacterState
     {
@@ -33,6 +34,8 @@ public class Character : MonoBehaviour
     private void Awake() {
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _health = GetComponent<Health>();
+        _damageCaster = GetComponentInChildren<DamageCaster>();
         
         if(isPlayer == false){
             _navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -153,9 +156,29 @@ public class Character : MonoBehaviour
         Debug.Log("转换状态");
 
     }
-
+    
     public void AttackAnimationEnds()
     {
         SwitchStateTo(CharacterState.Normal);
     }
+
+    
+    public void ApplyDamage(int damage, Vector3 attackerPos = new Vector3())
+    {
+        if(_health != null)
+        {
+            _health.ApplyDamage(damage);
+        }
+    }
+
+    public void EnableDamageCaster()
+    {
+        _damageCaster.EnableDamageCaster();
+    }
+
+    public void DisableDamageCaster()
+    {
+        _damageCaster.DisableDamageCaster();
+    }
+
 }
