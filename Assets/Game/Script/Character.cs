@@ -130,6 +130,8 @@ public class Character : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
+                if(_damageCaster != null)
+                    DisableDamageCaster();
                 break;
         }
         //Entering state
@@ -168,6 +170,10 @@ public class Character : MonoBehaviour
         if(_health != null)
         {
             _health.ApplyDamage(damage);
+        }
+        if(!isPlayer)
+        {
+            GetComponent<EnemyVFXManager>().PlayBeingHitVFX(attackerPos);
         }
     }
 
