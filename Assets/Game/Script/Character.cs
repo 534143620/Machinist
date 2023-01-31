@@ -161,6 +161,7 @@ public class Character : MonoBehaviour
             case CharacterState.Dead:
                 _cc.enabled = false;
                 _animator.SetTrigger("Dead");
+                StartCoroutine(MaterialDissolve());
                 break;
         }
 
@@ -207,6 +208,31 @@ public class Character : MonoBehaviour
 
         _materialPropertyBlock.SetFloat("_blink",0f);
         _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
+    }
+
+    IEnumerator MaterialDissolve()
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        float dissolveTimeDuration = 2f;
+        float currentDissolveTime = 0;
+        float dissolveHeight_start = 20f;
+        float dissolveHeight_end = -10f;
+        float dissolveHeight;
+
+        _materialPropertyBlock.SetFloat("_enableDissolve",1f);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+        //实现线性的溶解
+        while(currentDissolveTime < dissolveTimeDuration)
+        {
+            currentDissolveTime += Time.deltaTime;
+            dissolveHeight = Mathf.Lerp(dissolveHeight_start,dissolveHeight_end,currentDissolveTime / dissolveTimeDuration);
+            _materialPropertyBlock.SetFloat("_dissolve_height",dissolveHeight);
+            _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+            yield return null;
+        }
+
 
     }
 
