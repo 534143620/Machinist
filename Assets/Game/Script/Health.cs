@@ -19,5 +19,12 @@ public class Health : MonoBehaviour
         CurrentHealth -= damage;
         Debug.Log(gameObject.name + "took damage" + damage);
         Debug.Log(gameObject.name + "currentHealth" + CurrentHealth);
+        CheckHealth();
+    }
+
+    private void CheckHealth()
+    {
+        if(CurrentHealth <= 0)
+           _cc.SwitchStateTo(Character.CharacterState.Dead);
     }
 }

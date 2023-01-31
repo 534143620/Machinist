@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
     //state
     public enum CharacterState
     {
-        Normal,Attacking
+        Normal,Attacking,Dead
     }
     public CharacterState currentState;
     //Material animation
@@ -111,6 +111,8 @@ public class Character : MonoBehaviour
 
                 }
                 break;
+            case CharacterState.Dead:
+                return;
         }
 
         if(isPlayer){
@@ -123,7 +125,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    private void SwitchStateTo(CharacterState newState){
+    public void SwitchStateTo(CharacterState newState){
         //clear cache
         if(isPlayer)
         {
@@ -155,6 +157,10 @@ public class Character : MonoBehaviour
                     attackStartTime = Time.time;
 
                 AttackAnimationEnds();
+                break;
+            case CharacterState.Dead:
+                _cc.enabled = false;
+                _animator.SetTrigger("Dead");
                 break;
         }
 
