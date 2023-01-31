@@ -30,13 +30,19 @@ public class Character : MonoBehaviour
         Normal,Attacking
     }
     public CharacterState currentState;
+    //Material animation
+    private MaterialPropertyBlock _materialPropertyBlock;
+    private SkinnedMeshRenderer _skinnedMeshRenderer;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _health = GetComponent<Health>();
         _damageCaster = GetComponentInChildren<DamageCaster>();
-        
+        _skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        _materialPropertyBlock = new MaterialPropertyBlock();
+        _skinnedMeshRenderer.GetPropertyBlock(_materialPropertyBlock);
+
         if(isPlayer == false){
             _navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             targetPlayer = GameObject.FindWithTag("Player").transform;
@@ -63,11 +69,10 @@ public class Character : MonoBehaviour
         if(_movementVelocity != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(_movementVelocity);
         _animator.SetBool("AirBorne",!_cc.isGrounded);
-        
     }
 
     private void CalculateEnemyMovement()
-    {   
+    {
         if (Vector3.Distance(targetPlayer.position,transform.position) >= _navMeshAgent.stoppingDistance)
         {
             _navMeshAgent.SetDestination(targetPlayer.position);
@@ -114,7 +119,7 @@ public class Character : MonoBehaviour
             else
                 _verticalVelocity = Gravity * 0.3f;
             _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
-            _cc.Move(_movementVelocity);    
+            _cc.Move(_movementVelocity);
         }
     }
 
@@ -158,13 +163,12 @@ public class Character : MonoBehaviour
         Debug.Log("转换状态");
 
     }
-    
+
     public void AttackAnimationEnds()
     {
         SwitchStateTo(CharacterState.Normal);
     }
 
-    
     public void ApplyDamage(int damage, Vector3 attackerPos = new Vector3())
     {
         if(_health != null)
@@ -175,6 +179,7 @@ public class Character : MonoBehaviour
         {
             GetComponent<EnemyVFXManager>().PlayBeingHitVFX(attackerPos);
         }
+        StartCoroutine(MaterialBlink());
     }
 
     public void EnableDamageCaster()
@@ -185,6 +190,18 @@ public class Character : MonoBehaviour
     public void DisableDamageCaster()
     {
         _damageCaster.DisableDamageCaster();
+    }
+
+    IEnumerator MaterialBlink()
+    {
+        _materialPropertyBlock.SetFloat("_blink",0.4f);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
+        yield return new WaitForSeconds(0.2f);
+
+        _materialPropertyBlock.SetFloat("_blink",0f);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
     }
 
 }
