@@ -314,6 +314,7 @@ MonoBehaviour:
   footStep: {fileID: 1930869478}
   AttackVFX: {fileID: 1759537561}
   BeingHitVFX: {fileID: 601581123}
+  BeingHitSplashVFX: {fileID: 5091917010390914819, guid: d1fe802ee7b6fc24497016910b9375d6, type: 3}
 --- !u!114 &74488077
 MonoBehaviour:
   m_ObjectHideFlags: 0

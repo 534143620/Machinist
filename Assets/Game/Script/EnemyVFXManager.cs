@@ -8,6 +8,7 @@ public class EnemyVFXManager : MonoBehaviour
    public VisualEffect footStep;
    public VisualEffect AttackVFX;
    public ParticleSystem BeingHitVFX;
+   public VisualEffect BeingHitSplashVFX;
    public void BurstFootStep()
    {    
       //footStep.SendEvent("OnPlay"); //效果与Play相同
@@ -26,5 +27,14 @@ public class EnemyVFXManager : MonoBehaviour
       forceForward.y = 0;
       BeingHitVFX.transform.rotation = Quaternion.LookRotation(forceForward);
       BeingHitVFX.Play();
+
+      //敌人血飞溅效果   
+      //TODO飞溅的效果可以用对象池来实现，不然敌人一直受伤害,你会一直有新的预制体产生
+      Vector3 splashPos = transform.position;
+      splashPos.y += 2.0f;
+      VisualEffect newSplashVFX = Instantiate(BeingHitSplashVFX,splashPos,Quaternion.identity);
+      newSplashVFX.Play();
+      Destroy(newSplashVFX.gameObject,5.0f);
+
    }
 }
