@@ -25,6 +25,11 @@ public class Character : MonoBehaviour
     private Health _health;
     private DamageCaster _damageCaster;
 
+    //无敌状态
+    public bool IsInvincible;
+    public float InvincibleDuration = 2f;
+
+    private Vector3 impactOnCharacter;
     //状态
     public enum CharacterState
     {
@@ -117,6 +122,12 @@ public class Character : MonoBehaviour
             case CharacterState.Dead:
                 return;
             case CharacterState.BeingHit:
+                if(impactOnCharacter.magnitude  > 0.2f)
+                {
+                    _movementVelocity = impactOnCharacter * Time.deltaTime;
+                }
+                impactOnCharacter = Vector3.Lerp(impactOnCharacter, Vector3.zero,Time.deltaTime * 5);
+
                 break;
         }
 
@@ -175,6 +186,11 @@ public class Character : MonoBehaviour
                 break;
              case CharacterState.BeingHit:
                 _animator.SetTrigger("BeingHit");
+                if(isPlayer)
+                {
+                    IsInvincible = true;
+                    StartCoroutine(DelayCancelInvincible());
+                }
                 break;
         }
 
@@ -196,6 +212,10 @@ public class Character : MonoBehaviour
 
     public void ApplyDamage(int damage, Vector3 attackerPos = new Vector3())
     {
+        if(IsInvincible && isPlayer)
+        {
+            return;
+        }
         if(_health != null)
         {
             _health.ApplyDamage(damage);
@@ -209,8 +229,19 @@ public class Character : MonoBehaviour
         if(isPlayer && currentState != CharacterState.Dead)
         {
             SwitchStateTo(CharacterState.BeingHit);
+            ApplyImpact(attackerPos,10f);
         }
     }
+
+    private void ApplyImpact(Vector3 attackerPos, float force)
+    {
+        //我减你 方向是 你->我
+        Vector3 impactDir = transform.position - attackerPos;
+        impactDir.Normalize();
+        impactDir.y = 0;
+        impactOnCharacter = impactDir * force;
+    }
+
 
     public void EnableDamageCaster()
     {
@@ -220,6 +251,12 @@ public class Character : MonoBehaviour
     public void DisableDamageCaster()
     {
         _damageCaster.DisableDamageCaster();
+    }
+
+    IEnumerator DelayCancelInvincible()
+    {
+        yield return new WaitForSeconds(InvincibleDuration);
+        IsInvincible = false;
     }
 
     IEnumerator MaterialBlink()
