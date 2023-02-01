@@ -24,15 +24,20 @@ public class Character : MonoBehaviour
     //Health
     private Health _health;
     private DamageCaster _damageCaster;
-    //state
+
+    //状态
     public enum CharacterState
     {
-        Normal,Attacking,Dead
+        Normal,Attacking,Dead,BeingHit
     }
+
     public CharacterState currentState;
     //Material animation
     private MaterialPropertyBlock _materialPropertyBlock;
     private SkinnedMeshRenderer _skinnedMeshRenderer;
+
+    //角色身上的物品
+    public GameObject ItemToDrop;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
@@ -100,8 +105,6 @@ public class Character : MonoBehaviour
                 //TODO
                 if(isPlayer)
                 {
-                    _movementVelocity = Vector3.zero;
-
                     if(Time.time < attackStartTime + attackSlideDuration)
                     {
                         float timePassed = Time.time - attackStartTime;
@@ -113,6 +116,8 @@ public class Character : MonoBehaviour
                 break;
             case CharacterState.Dead:
                 return;
+            case CharacterState.BeingHit:
+                break;
         }
 
         if(isPlayer){
@@ -122,6 +127,7 @@ public class Character : MonoBehaviour
                 _verticalVelocity = Gravity * 0.3f;
             _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
             _cc.Move(_movementVelocity);
+            _movementVelocity = Vector3.zero;
         }
     }
 
@@ -137,8 +143,12 @@ public class Character : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
-                if(_damageCaster != null)
-                    DisableDamageCaster();
+                // if(_damageCaster != null)
+                //     DisableDamageCaster();
+                break;
+            case CharacterState.Dead:
+                break;
+            case CharacterState.BeingHit:
                 break;
         }
         //Entering state
@@ -163,6 +173,9 @@ public class Character : MonoBehaviour
                 _animator.SetTrigger("Dead");
                 StartCoroutine(MaterialDissolve());
                 break;
+             case CharacterState.BeingHit:
+                _animator.SetTrigger("BeingHit");
+                break;
         }
 
         currentState = newState;
@@ -172,6 +185,11 @@ public class Character : MonoBehaviour
     }
 
     public void AttackAnimationEnds()
+    {
+        SwitchStateTo(CharacterState.Normal);
+    }
+
+    public void BeingHitAnimationEnds()
     {
         SwitchStateTo(CharacterState.Normal);
     }
@@ -187,6 +205,11 @@ public class Character : MonoBehaviour
             GetComponent<EnemyVFXManager>().PlayBeingHitVFX(attackerPos);
         }
         StartCoroutine(MaterialBlink());
+
+        if(isPlayer && currentState != CharacterState.Dead)
+        {
+            SwitchStateTo(CharacterState.BeingHit);
+        }
     }
 
     public void EnableDamageCaster()
@@ -233,7 +256,16 @@ public class Character : MonoBehaviour
             yield return null;
         }
 
+        DropItem();
+        this.gameObject.SetActive(false);
+    }
 
+    public void DropItem()
+    {
+        if(ItemToDrop != null)
+        {
+            Instantiate(ItemToDrop,transform.position,Quaternion.identity);
+        }
     }
 
 }
