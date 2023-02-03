@@ -21,6 +21,8 @@ public class Character : MonoBehaviour
     private float attackStartTime;
     public float attackSlideDuration = 0.1f;
     public float attackSlideSpeed = 1.2f;
+
+    public float SlideSpeed = 9.0f;
     //Health
     private Health _health;
     private DamageCaster _damageCaster;
@@ -35,7 +37,7 @@ public class Character : MonoBehaviour
     //状态
     public enum CharacterState
     {
-        Normal,Attacking,Dead,BeingHit
+        Normal,Attacking,Dead,BeingHit,Slide
     }
 
     public CharacterState currentState;
@@ -64,12 +66,15 @@ public class Character : MonoBehaviour
              _playerInput = GetComponent<PlayerInput>();
         }
 
-    }
+    }  
 
     private void CalculatePlayerMovement()
     {
         if(_playerInput.MouseButtonDown && _cc.isGrounded){
             SwitchStateTo(CharacterState.Attacking);
+            return;
+        }else if(_playerInput.SpaceKeyDown && _cc.isGrounded){
+            SwitchStateTo(CharacterState.Slide);
             return;
         }
 
@@ -145,7 +150,9 @@ public class Character : MonoBehaviour
                     _movementVelocity = impactOnCharacter * Time.deltaTime;
                 }
                 impactOnCharacter = Vector3.Lerp(impactOnCharacter, Vector3.zero,Time.deltaTime * 5);
-
+                break;
+            case CharacterState.Slide:
+                _movementVelocity = transform.forward * SlideSpeed * Time.deltaTime;
                 break;
         }
 
@@ -164,7 +171,7 @@ public class Character : MonoBehaviour
         //clear cache
         if(isPlayer)
         {
-            _playerInput.MouseButtonDown = false;
+            _playerInput.ClearCache();
         }
         //Exiting state
         switch (currentState)
@@ -180,6 +187,8 @@ public class Character : MonoBehaviour
             case CharacterState.Dead:
                 break;
             case CharacterState.BeingHit:
+                break;
+            case CharacterState.Slide:
                 break;
         }
         //Entering state
@@ -204,7 +213,7 @@ public class Character : MonoBehaviour
                 _animator.SetTrigger("Dead");
                 StartCoroutine(MaterialDissolve());
                 break;
-             case CharacterState.BeingHit:
+            case CharacterState.BeingHit:
                 _animator.SetTrigger("BeingHit");
                 if(isPlayer)
                 {
@@ -212,11 +221,14 @@ public class Character : MonoBehaviour
                     StartCoroutine(DelayCancelInvincible());
                 }
                 break;
+            case CharacterState.Slide:
+                _animator.SetTrigger("Slide");
+                break;
         }
 
         currentState = newState;
 
-        Debug.Log("转换状态");
+        Debug.Log("转换状态" + currentState );
 
     }
 
@@ -226,6 +238,11 @@ public class Character : MonoBehaviour
     }
 
     public void BeingHitAnimationEnds()
+    {
+        SwitchStateTo(CharacterState.Normal);
+    }
+
+    public void SlideAnimationEnds()
     {
         SwitchStateTo(CharacterState.Normal);
     }
