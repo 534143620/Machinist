@@ -29,6 +29,8 @@ public class Character : MonoBehaviour
     public bool IsInvincible;
     public float InvincibleDuration = 2f;
 
+    public float attackAnimationDuration;
+
     private Vector3 impactOnCharacter;
     //状态
     public enum CharacterState
@@ -113,9 +115,24 @@ public class Character : MonoBehaviour
                 {
                     if(Time.time < attackStartTime + attackSlideDuration)
                     {
+                        //实现加速冲刺的效果
                         float timePassed = Time.time - attackStartTime;
                         float lerpTime = timePassed / attackSlideDuration;
                         _movementVelocity = Vector3.Lerp(transform.forward * attackSlideSpeed, Vector3.zero,lerpTime);
+                    }
+                    if(_playerInput.MouseButtonDown && _cc.isGrounded)
+                    {
+                        string currentClipName = _animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+                        //大于等于1表示动画播放完一次了
+                        Debug.Log("当前播放的动画 + " + currentClipName);
+                        attackAnimationDuration = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                        if(currentClipName != "LittleAdventurerAndie_ATTACK_03" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
+                        {
+                            _playerInput.MouseButtonDown = false;
+                            SwitchStateTo(CharacterState.Attacking);
+
+                            CalculatePlayerMovement();
+                        }
                     }
 
                 }
@@ -155,8 +172,10 @@ public class Character : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
-                // if(_damageCaster != null)
-                //     DisableDamageCaster();
+                if(_damageCaster != null)
+                    _damageCaster.DisableDamageCaster();
+                if(isPlayer)
+                    GetComponent<PlayerVFXManager>().StopBlade();
                 break;
             case CharacterState.Dead:
                 break;
