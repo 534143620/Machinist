@@ -43,6 +43,7 @@ public class Character : MonoBehaviour
 
     //角色身上的物品
     public GameObject ItemToDrop;
+    public int Coin;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
@@ -297,11 +298,34 @@ public class Character : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    //掉落道具
     public void DropItem()
     {
         if(ItemToDrop != null)
         {
             Instantiate(ItemToDrop,transform.position,Quaternion.identity);
+        }
+    }
+    //拾取道具
+    public void PickUpItem(Prop item)
+    {
+        void AddHealth(int health)
+        {
+            _health.AddHealth(health);
+            GetComponent<PlayerVFXManager>().PlayHealVFX();
+        }
+        void AddCoin(int coin)
+        {
+            Coin += coin;
+        }
+        switch (item.Type)
+        {
+            case Prop.PropType.Heal:
+                AddHealth(item.Value);
+                break;
+            case Prop.PropType.Coin:
+                AddCoin(item.Value);
+                break;
         }
     }
 
