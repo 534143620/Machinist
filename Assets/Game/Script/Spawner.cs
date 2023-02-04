@@ -5,12 +5,30 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     private List<SpawnPoint> spawnPointList;
+    private List<Character> spawnCharactersList;
     private bool hasSpawned;
     public BoxCollider _collider;
 
     private void Awake() {
         var spawnPointArray = transform.parent.GetComponentsInChildren<SpawnPoint>();
         spawnPointList = new List<SpawnPoint>(spawnPointArray);
+        spawnCharactersList = new List<Character>();
+    }
+
+    private void Update() {
+        if(!hasSpawned || spawnCharactersList.Count == 0)
+            return;
+        bool allSpawnedCCDead = true;
+        foreach (var item in spawnCharactersList)
+        {
+            if(item.currentState != Character.CharacterState.Dead)
+            {
+                allSpawnedCCDead = false;
+                break;
+            }
+        }
+        if(allSpawnedCCDead)
+            EventHandler.CallOpenTheDoorEvent();
     }
 
     public void SpawnCharacters()
@@ -24,6 +42,7 @@ public class Spawner : MonoBehaviour
             if(point.EnemyToSpawn != null)
             {
               GameObject spawnedGameObject = Instantiate(point.EnemyToSpawn,point.transform.position,Quaternion.identity);
+              spawnCharactersList.Add(spawnedGameObject.GetComponent<Character>());
             }
         }
     }

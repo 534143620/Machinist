@@ -5,16 +5,22 @@ using DG.Tweening;
 
 public class Door : MonoBehaviour
 {
+    private void OnEnable() {
+        EventHandler.OpenTheDoor += OnCallOpenTheDoorEvent;
+    }
+    private void OnDisable() {
+        EventHandler.OpenTheDoor -= OnCallOpenTheDoorEvent;
+    }
     public float OpenDuration = 5f;
     public float OpenTargetY = -80f;
 
-    private void Awake() {
-        StartCoroutine(OpenDoorAnimation());
+    public void OnCallOpenTheDoorEvent()
+    {
+        OpenDoorAnimation();
     }
 
-    IEnumerator OpenDoorAnimation()
+    private void OpenDoorAnimation()
     {
         transform.DORotate(new Vector3(transform.eulerAngles.x,OpenTargetY,transform.eulerAngles.z),OpenDuration,RotateMode.Fast);
-        yield return null;
     }
 }
