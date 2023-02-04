@@ -37,7 +37,7 @@ public class Character : MonoBehaviour
     //状态
     public enum CharacterState
     {
-        Normal,Attacking,Dead,BeingHit,Slide
+        Normal,Attacking,Dead,BeingHit,Slide,Spawn
     }
 
     public CharacterState currentState;
@@ -48,6 +48,9 @@ public class Character : MonoBehaviour
     //角色身上的物品
     public GameObject ItemToDrop;
     public int Coin;
+    //敌人生成
+    public float SpawnDuration = 2.0f;
+    public float currentSpawnTime;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
@@ -62,6 +65,7 @@ public class Character : MonoBehaviour
             _navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             targetPlayer = GameObject.FindWithTag("Player").transform;
             _navMeshAgent.speed = MoveSpeed;
+            SwitchStateTo(CharacterState.Spawn);
         }else{
              _playerInput = GetComponent<PlayerInput>();
         }
@@ -154,6 +158,13 @@ public class Character : MonoBehaviour
             case CharacterState.Slide:
                 _movementVelocity = transform.forward * SlideSpeed * Time.deltaTime;
                 break;
+            case CharacterState.Spawn:
+                currentSpawnTime -= Time.deltaTime;
+                if(currentSpawnTime <= 0)
+                {
+                    SwitchStateTo(CharacterState.Normal);
+                }
+                break;
         }
 
         if(isPlayer){
@@ -190,6 +201,9 @@ public class Character : MonoBehaviour
                 break;
             case CharacterState.Slide:
                 break;
+            case CharacterState.Spawn:
+                IsInvincible = false;
+                break;
         }
         //Entering state
         switch (newState)
@@ -223,6 +237,11 @@ public class Character : MonoBehaviour
                 break;
             case CharacterState.Slide:
                 _animator.SetTrigger("Slide");
+                break;
+            case CharacterState.Spawn:
+                IsInvincible = true;
+                currentSpawnTime = SpawnDuration;
+                StartCoroutine(MaterialAppear());
                 break;
         }
 
@@ -334,6 +353,27 @@ public class Character : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    IEnumerator MaterialAppear()
+    {
+        float dissolveTimeDuration = SpawnDuration;
+        float currentDissolveTime = 0;
+        float dissolveHeight_start = -10f;
+        float dissolveHeight_end = 20f;
+        float dissolveHeight;
+
+        _materialPropertyBlock.SetFloat("_enableDissolve",1f);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+        //实现线性的溶解
+        while(currentDissolveTime < dissolveTimeDuration)
+        {
+            currentDissolveTime += Time.deltaTime;
+            dissolveHeight = Mathf.Lerp(dissolveHeight_start,dissolveHeight_end,currentDissolveTime / dissolveTimeDuration);
+            _materialPropertyBlock.SetFloat("_dissolve_height",dissolveHeight);
+            _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+            yield return null;
+        }
+    }
+
     //掉落道具
     public void DropItem()
     {
@@ -364,10 +404,4 @@ public class Character : MonoBehaviour
                 break;
         }
     }
-
-    // public void LookAtTarget()
-    // {
-    //     if(Cu)
-    // }
-
 }
