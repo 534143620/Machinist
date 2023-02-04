@@ -155,8 +155,8 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _blink: 0
-    - _dissolve_height: 300
+    - _blink: 0.04
+    - _dissolve_height: 30
     - _enableDissolve: 0
     m_Colors:
     - Blink_Color: {r: 1, g: 1, b: 1, a: 1}

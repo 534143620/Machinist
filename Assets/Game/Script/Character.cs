@@ -15,7 +15,7 @@ public class Character : MonoBehaviour
     //Enemy
     public bool isPlayer = true;
     private UnityEngine.AI.NavMeshAgent _navMeshAgent;
-    private Transform targetPlayer;
+    public Transform targetPlayer;
 
     //Player slides
     private float attackStartTime;
@@ -364,5 +364,10 @@ public class Character : MonoBehaviour
                 break;
         }
     }
+
+    // public void LookAtTarget()
+    // {
+    //     if(Cu)
+    // }
 
 }

@@ -60,13 +60,11 @@ public class DamageCaster : MonoBehaviour
     // private void OnDrawGizmos() {
     //     if(_damageCasterCollider == null)
     //          _damageCasterCollider = GetComponent<Collider>();
-        
     //     RaycastHit hit;
 
     //     Vector3 orginlPos = transform.position + ( -_damageCasterCollider.bounds.extents.z) * transform.forward;
 
     //     bool isHit = Physics.BoxCast(orginlPos,_damageCasterCollider.bounds.extents / 2, transform.forward, out hit, transform.rotation,_damageCasterCollider.bounds.extents.z,1<<6);
-        
     //     if(isHit)
     //     {
     //         Gizmos.color = Color.red;
