@@ -27,8 +27,11 @@ public class Spawner : MonoBehaviour
                 break;
             }
         }
-        if(allSpawnedCCDead)
+        if(allSpawnedCCDead){
+            spawnCharactersList.Clear();
             EventHandler.CallOpenTheDoorEvent();
+            EventHandler.CallGameWinEvent();
+        }
     }
 
     public void SpawnCharacters()

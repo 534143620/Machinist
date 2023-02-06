@@ -12,4 +12,11 @@ public class EventHandler
         OpenTheDoor?.Invoke();
     }
 
+    public static event Action GameWin;
+
+    public static void CallGameWinEvent()
+    {
+        GameWin?.Invoke();
+    }
+
 }

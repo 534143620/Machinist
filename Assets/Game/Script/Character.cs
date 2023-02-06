@@ -80,7 +80,7 @@ public class Character : MonoBehaviour
         }else if(_playerInput.SpaceKeyDown && _cc.isGrounded){
             SwitchStateTo(CharacterState.Slide);
             return;
-        }
+        } 
 
         _movementVelocity.Set(_playerInput.HorizontalInput,0f,_playerInput.VerticalInput);
         _movementVelocity.Normalize();
