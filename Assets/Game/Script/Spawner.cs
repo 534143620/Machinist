@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Spawner : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Spawner : MonoBehaviour
     private List<Character> spawnCharactersList;
     private bool hasSpawned;
     public BoxCollider _collider;
+    public UnityEvent onAllSpawnCharactersDead;
 
     private void Awake() {
         var spawnPointArray = transform.parent.GetComponentsInChildren<SpawnPoint>();
@@ -28,9 +30,11 @@ public class Spawner : MonoBehaviour
             }
         }
         if(allSpawnedCCDead){
+            if(onAllSpawnCharactersDead != null)
+                onAllSpawnCharactersDead.Invoke();
+            // EventHandler.CallOpenTheDoorEvent();
+            // EventHandler.CallGameWinEvent();
             spawnCharactersList.Clear();
-            EventHandler.CallOpenTheDoorEvent();
-            EventHandler.CallGameWinEvent();
         }
     }
 

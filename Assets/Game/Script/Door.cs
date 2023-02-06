@@ -19,7 +19,7 @@ public class Door : MonoBehaviour
         OpenDoorAnimation();
     }
 
-    private void OpenDoorAnimation()
+    public void OpenDoorAnimation()
     {
         transform.DORotate(new Vector3(transform.eulerAngles.x,OpenTargetY,transform.eulerAngles.z),OpenDuration,RotateMode.Fast);
     }
