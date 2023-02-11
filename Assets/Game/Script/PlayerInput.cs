@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour
     public float VerticalInput;
     public bool MouseButtonDown;
     public bool SpaceKeyDown;
+    public bool B_KeyDown;
 
     void Update()
     {
@@ -18,6 +19,10 @@ public class PlayerInput : MonoBehaviour
         if(!SpaceKeyDown && Time.timeScale != 0)
         {
             SpaceKeyDown = Input.GetKeyDown(KeyCode.Space);
+        }
+        if(!B_KeyDown && Time.timeScale != 0)
+        {
+            B_KeyDown = Input.GetKeyDown(KeyCode.B);
         }
         HorizontalInput = Input.GetAxisRaw("Horizontal");
         VerticalInput =  Input.GetAxisRaw("Vertical");
@@ -31,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     {
         MouseButtonDown = false;
         SpaceKeyDown = false;
+        B_KeyDown = false;
         HorizontalInput = 0;
         VerticalInput = 0;
     }

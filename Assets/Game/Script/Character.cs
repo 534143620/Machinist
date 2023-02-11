@@ -37,7 +37,7 @@ public class Character : MonoBehaviour
     //状态
     public enum CharacterState
     {
-        Normal,Attacking,Dead,BeingHit,Slide,Spawn
+        Normal,Attacking,Dead,BeingHit,Slide,Spawn,Dance
     }
 
     public CharacterState currentState;
@@ -80,7 +80,11 @@ public class Character : MonoBehaviour
         }else if(_playerInput.SpaceKeyDown && _cc.isGrounded){
             SwitchStateTo(CharacterState.Slide);
             return;
-        } 
+        }else if (_playerInput.B_KeyDown && _cc.isGrounded)
+        {
+            SwitchStateTo(CharacterState.Dance);
+            return;
+        }
 
         _movementVelocity.Set(_playerInput.HorizontalInput,0f,_playerInput.VerticalInput);
         _movementVelocity.Normalize();
@@ -165,6 +169,13 @@ public class Character : MonoBehaviour
                     SwitchStateTo(CharacterState.Normal);
                 }
                 break;
+            case CharacterState.Dance:
+                if(_playerInput.HorizontalInput == 1 || _playerInput.VerticalInput == 1)
+                {
+                    _animator.SetBool("Dance",false);
+                    SwitchStateTo(CharacterState.Normal);
+                }
+                break;
         }
 
         if(isPlayer){
@@ -204,6 +215,8 @@ public class Character : MonoBehaviour
             case CharacterState.Spawn:
                 IsInvincible = false;
                 break;
+            case CharacterState.Dance:
+                break;
         }
         //Entering state
         switch (newState)
@@ -242,6 +255,9 @@ public class Character : MonoBehaviour
                 IsInvincible = true;
                 currentSpawnTime = SpawnDuration;
                 StartCoroutine(MaterialAppear());
+                break;
+            case CharacterState.Dance:
+                _animator.SetBool("Dance",true);
                 break;
         }
 
