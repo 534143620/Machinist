@@ -186,6 +186,13 @@ public class Character : MonoBehaviour
             _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
             _cc.Move(_movementVelocity);
             _movementVelocity = Vector3.zero;
+        }else
+        {
+            if(currentState != CharacterState.Normal)
+            {
+                _cc.Move(_movementVelocity);
+                _movementVelocity = Vector3.zero;
+            }
         }
     }
 
@@ -298,11 +305,13 @@ public class Character : MonoBehaviour
         }
         StartCoroutine(MaterialBlink());
 
-        if(isPlayer && currentState != CharacterState.Dead)
+        float impactForce = 10f;
+        if(!isPlayer)
         {
-            SwitchStateTo(CharacterState.BeingHit);
-            ApplyImpact(attackerPos,10f);
+            impactForce = 1.5f;
         }
+        SwitchStateTo(CharacterState.BeingHit);
+        ApplyImpact(attackerPos,impactForce);
     }
 
     private void ApplyImpact(Vector3 attackerPos, float force)

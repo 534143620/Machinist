@@ -1263,7 +1263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a4767fd1517774e813b7ddd68ca51a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 100
+  Damage: 5
   TargetTag: Enemy
 --- !u!65 &783134558
 BoxCollider:

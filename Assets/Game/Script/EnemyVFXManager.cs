@@ -10,7 +10,7 @@ public class EnemyVFXManager : MonoBehaviour
    public ParticleSystem BeingHitVFX;
    public VisualEffect BeingHitSplashVFX;
    public void BurstFootStep()
-   {    
+   {
       //footStep.SendEvent("OnPlay"); //效果与Play相同
       footStep.Play();
    }
