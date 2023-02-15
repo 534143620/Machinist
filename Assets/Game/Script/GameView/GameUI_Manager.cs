@@ -15,6 +15,7 @@ public class GameUI_Manager : MonoBehaviour
     private GameObject UI_GamePause;
     private GameObject UI_GameWin;
     private GameObject UI_GameLost;
+    private GameObject UI_GameMinMap;
 
     GameUI_State currentState;
 
@@ -22,6 +23,7 @@ public class GameUI_Manager : MonoBehaviour
         UI_GamePause = transform.Find("UI_GamePause").gameObject;
         UI_GameWin = transform.Find("UI_GameWin").gameObject;
         UI_GameLost = transform.Find("UI_GameLost").gameObject;
+        UI_GameMinMap = transform.Find("UI_GameMinMap").gameObject;
         SwitchUIState(GameUI_State.GamePlay);
     }
 
@@ -59,10 +61,11 @@ public class GameUI_Manager : MonoBehaviour
 
     public void TogglePauseUI()
     {
-        if(currentState == GameUI_State.GamePlay)
-            SwitchUIState(GameUI_State.GamePause);
-        else if(currentState == GameUI_State.GamePause)
-            SwitchUIState(GameUI_State.GamePlay);
+        // if(currentState == GameUI_State.GamePlay)
+        //     SwitchUIState(GameUI_State.GamePause);
+        // else if(currentState == GameUI_State.GamePause)
+        //     SwitchUIState(GameUI_State.GamePlay);
+        SwitchUIState(currentState == GameUI_State.GamePlay ? GameUI_State.GamePause : GameUI_State.GamePlay);
     }
 
     public void ShowGameLostUI()
@@ -73,5 +76,10 @@ public class GameUI_Manager : MonoBehaviour
     public void ShowGameWinUI()
     {
         SwitchUIState(GameUI_State.GameWin);
+    }
+
+    public void ShowMinMap()
+    {
+        UI_GameMinMap.SetActive(!UI_GameMinMap.activeSelf);
     }
 }

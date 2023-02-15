@@ -9,6 +9,7 @@ public class PlayerInput : MonoBehaviour
     public bool MouseButtonDown;
     public bool SpaceKeyDown;
     public bool B_KeyDown;
+    public bool Z_KeyDown;
 
     void Update()
     {

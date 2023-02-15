@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
             return;
         if(Input.GetKeyDown(KeyCode.Escape))
             gameUI_Manager.TogglePauseUI();
+        if(Input.GetKeyDown(KeyCode.Z))
+            gameUI_Manager.ShowMinMap();
         if(playerCharacter.currentState == Character.CharacterState.Dead){
             isGameOver = true;
             GameOver();
