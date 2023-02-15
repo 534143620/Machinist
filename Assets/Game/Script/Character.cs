@@ -70,7 +70,7 @@ public class Character : MonoBehaviour
              _playerInput = GetComponent<PlayerInput>();
         }
 
-    }  
+    }
 
     private void CalculatePlayerMovement()
     {
@@ -404,7 +404,7 @@ public class Character : MonoBehaviour
         void AddHealth(int health)
         {
             _health.AddHealth(health);
-            GetComponent<PlayerVFXManager>().PlayHealVFX();
+            GetComponent<PlayerVFXManager>().PlayHealVFX(transform.position);
         }
         void AddCoin(int coin)
         {

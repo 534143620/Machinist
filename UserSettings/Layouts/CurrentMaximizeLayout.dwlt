@@ -462,9 +462,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 756.3062, y: 469.18878, z: -0.6734754}
+    m_Target: {x: 865.4357, y: 498.76797, z: -1.0381043}
     speed: 2
-    m_Value: {x: 756.3062, y: 469.18878, z: -0.6734754}
+    m_Value: {x: 865.4357, y: 498.76797, z: -1.0381043}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -515,9 +515,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 620.4006
+    m_Target: 648.3186
     speed: 2
-    m_Value: 620.4006
+    m_Value: 648.3186
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -740,8 +740,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 0e6fffff
-      m_LastClickedID: -37106
+      m_SelectedIDs: 
+      m_LastClickedID: 0
       m_ExpandedIDs: 0e6ffffffaf4ffff18fbffffb4720000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -833,22 +833,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Game/Script
+    - Assets/Resources/MinMap
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Game/Script
+  - Assets/Resources/MinMap
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\Machinist
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: d8b00000
-    m_LastClickedID: 45272
-    m_ExpandedIDs: 000000009eb00000a0b00000a2b00000a6b00000a8b00000c4b00000
+    m_SelectedIDs: 04b10000
+    m_LastClickedID: 45316
+    m_ExpandedIDs: 000000009eb00000a0b00000a2b00000a6b00000a8b00000c4b00000ccb00000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -901,8 +901,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 0e6fffff
-    m_LastClickedInstanceID: -37106
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: caa50000eca500005e72000020350000ae700000c270000006eb04006071000000000000
     m_RenameOverlay:
@@ -931,7 +931,7 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 108
+  m_DirectoriesAreaWidth: 123
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -951,8 +951,8 @@ MonoBehaviour:
     y: 0
     width: 314
     height: 767
-  m_MinSize: {x: 275, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}

@@ -34,24 +34,31 @@ public class PlayerVFXManager : MonoBehaviour
     {
         Blade03.Play();
     }
+    private const int BladeCount = 3;
+
     public void StopBlade()
     {
-        Blade01.Simulate(0);
-        Blade01.Stop();
-        Blade02.Simulate(0);
-        Blade02.Stop();
-        Blade03.Simulate(0);
-        Blade03.Stop();
+        for (int i = 1; i <= BladeCount; i++)
+        {
+            var blade = (ParticleSystem)GetType().GetField($"Blade0{i}").GetValue(this);
+            blade.Simulate(0);
+            blade.Stop();
+        }
     }
 
     public void PlaySlash(Vector3 pos)
     {
-        Slash.transform.position = pos;
-        Slash.Play();
+       PlayEffect(Slash, pos);
     }
 
-    public void PlayHealVFX()
+    public void PlayHealVFX(Vector3 pos)
     {
-        HealVFX.Play();
+        PlayEffect(HealVFX,pos);
+    }
+
+    public void PlayEffect(VisualEffect effect, Vector3 pos)
+    {
+        effect.transform.position = pos;
+        effect.Play();
     }
 }
