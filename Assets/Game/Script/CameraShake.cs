@@ -31,24 +31,34 @@ public class CameraShake : MonoBehaviour
         _cbmcp.m_AmplitudeGain = ShakeIntensity;
 
         timer = ShakeTime;
+        StartCoroutine(CancelShake());
     }
 
     void StopShake(){
         CinemachineBasicMultiChannelPerlin _cbmcp = CinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         _cbmcp.m_AmplitudeGain = 0f;
-        timer = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator CancelShake()
     {
-        if(timer > 0){
-
-            timer -= Time.deltaTime;
-
-            if(timer <= 0){
-                StopShake();
-            }
-        }
+        yield return new WaitForSeconds(timer);
+        StopShake();
     }
+
+
+
+
+
+    // // Update is called once per frame
+    // void Update()
+    // {
+    //     if(timer > 0){
+
+    //         timer -= Time.deltaTime;
+
+    //         if(timer <= 0){
+    //             StopShake();
+    //         }
+    //     }
+    // }
 }

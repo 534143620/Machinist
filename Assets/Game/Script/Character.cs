@@ -329,6 +329,7 @@ public class Character : MonoBehaviour
         else
         {
             ApplyImpact(attackerPos, 2.5f);
+            CameraShake.Instance.ShakeCamera();
         }
     }
 
