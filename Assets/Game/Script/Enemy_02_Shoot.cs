@@ -17,9 +17,9 @@ public class Enemy_02_Shoot : MonoBehaviour
 
     void Update()
     {
-        if(cc != null && cc.currentState != Character.CharacterState.Dead)
+        if(cc != null)
         {
-            transform.LookAt(cc.targetPlayer,Vector3.up);
+            cc.RotateToTarget();
         }
     }
 }

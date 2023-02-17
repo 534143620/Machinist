@@ -12,17 +12,20 @@ public class DamageCaster : MonoBehaviour
     public string TargetTag;
     private List<Collider> _damagedTargetList;
 
-    private void Awake() {
-        _damageCasterCollider = GetComponent<Collider>();
+    private void Awake()
+    {
+        _damageCasterCollider = GetComponent<BoxCollider>();
         _damageCasterCollider.enabled = false;
         _damagedTargetList = new List<Collider>();
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == TargetTag &&!_damagedTargetList.Contains(other))
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == TargetTag && !_damagedTargetList.Contains(other))
         {
             Character targetCC = other.GetComponent<Character>();
-            if(targetCC != null)
+
+            if (targetCC != null)
             {
                 targetCC.ApplyDamage(Damage,transform.parent.position);
 
@@ -48,7 +51,6 @@ public class DamageCaster : MonoBehaviour
     {
         _damagedTargetList.Clear();
         _damageCasterCollider.enabled = true;
-
     }
 
     public void DisableDamageCaster()
@@ -56,20 +58,4 @@ public class DamageCaster : MonoBehaviour
         _damagedTargetList.Clear();
         _damageCasterCollider.enabled = false;
     }
-
-    // private void OnDrawGizmos() {
-    //     if(_damageCasterCollider == null)
-    //          _damageCasterCollider = GetComponent<Collider>();
-    //     RaycastHit hit;
-
-    //     Vector3 orginlPos = transform.position + ( -_damageCasterCollider.bounds.extents.z) * transform.forward;
-
-    //     bool isHit = Physics.BoxCast(orginlPos,_damageCasterCollider.bounds.extents / 2, transform.forward, out hit, transform.rotation,_damageCasterCollider.bounds.extents.z,1<<6);
-    //     if(isHit)
-    //     {
-    //         Gizmos.color = Color.red;
-    //         Gizmos.DrawWireSphere(hit.point,0.3f);
-    //     }
-    // }
-
 }

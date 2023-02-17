@@ -15,12 +15,12 @@ public class Character : MonoBehaviour
     //Enemy
     public bool isPlayer = true;
     private UnityEngine.AI.NavMeshAgent _navMeshAgent;
-    public Transform targetPlayer;
+    private Transform targetPlayer;
 
     //Player slides
     private float attackStartTime;
-    public float attackSlideDuration = 0.1f;
-    public float attackSlideSpeed = 1.2f;
+    public float attackSlideDuration = 0.02f;
+    public float attackSlideSpeed = 1f;
 
     public float SlideSpeed = 9.0f;
     //Health
@@ -28,10 +28,10 @@ public class Character : MonoBehaviour
     private DamageCaster _damageCaster;
 
     //无敌状态
-    public bool IsInvincible;
-    public float InvincibleDuration = 2f;
+    public bool isInvincible;
+    public float invincibleDuration = 1f;
 
-    public float attackAnimationDuration;
+    private float attackAnimationDuration;
 
     private Vector3 impactOnCharacter;
     //状态
@@ -50,13 +50,14 @@ public class Character : MonoBehaviour
     public int Coin;
     //敌人生成
     public float SpawnDuration = 2.0f;
-    public float currentSpawnTime;
+    private float currentSpawnTime;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _health = GetComponent<Health>();
         _damageCaster = GetComponentInChildren<DamageCaster>();
+
         _skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         _materialPropertyBlock = new MaterialPropertyBlock();
         _skinnedMeshRenderer.GetPropertyBlock(_materialPropertyBlock);
@@ -110,7 +111,6 @@ public class Character : MonoBehaviour
             _animator.SetFloat("Speed",0f);
             SwitchStateTo(CharacterState.Attacking);
         }
-
     }
 
     private void FixedUpdate() {
@@ -144,7 +144,7 @@ public class Character : MonoBehaviour
                             _playerInput.MouseButtonDown = false;
                             SwitchStateTo(CharacterState.Attacking);
 
-                            CalculatePlayerMovement();
+                            //CalculatePlayerMovement();
                         }
                     }
 
@@ -153,11 +153,6 @@ public class Character : MonoBehaviour
             case CharacterState.Dead:
                 return;
             case CharacterState.BeingHit:
-                if(impactOnCharacter.magnitude  > 0.2f)
-                {
-                    _movementVelocity = impactOnCharacter * Time.deltaTime;
-                }
-                impactOnCharacter = Vector3.Lerp(impactOnCharacter, Vector3.zero,Time.deltaTime * 5);
                 break;
             case CharacterState.Slide:
                 _movementVelocity = transform.forward * SlideSpeed * Time.deltaTime;
@@ -177,6 +172,12 @@ public class Character : MonoBehaviour
                 }
                 break;
         }
+        // CheckBeingHit();
+        if(impactOnCharacter.magnitude  > 0.2f)
+        {
+            _movementVelocity = impactOnCharacter * Time.deltaTime;
+        }
+        impactOnCharacter = Vector3.Lerp(impactOnCharacter, Vector3.zero,Time.deltaTime * 5);
 
         if(isPlayer){
             if(_cc.isGrounded == false)
@@ -186,6 +187,7 @@ public class Character : MonoBehaviour
             _movementVelocity += _verticalVelocity * Vector3.up * Time.deltaTime;
             _cc.Move(_movementVelocity);
             _movementVelocity = Vector3.zero;
+            Debug.Log("玩家当前状态"+ currentState);
         }else
         {
             if(currentState != CharacterState.Normal)
@@ -193,7 +195,17 @@ public class Character : MonoBehaviour
                 _cc.Move(_movementVelocity);
                 _movementVelocity = Vector3.zero;
             }
+            Debug.Log("敌人当前状态"+ currentState);
         }
+    }
+
+    private void CheckBeingHit()
+    {
+        if(impactOnCharacter.magnitude  > 0.2f)
+        {
+            _movementVelocity = impactOnCharacter * Time.deltaTime;
+        }
+        impactOnCharacter = Vector3.Lerp(impactOnCharacter, Vector3.zero,Time.deltaTime * 5);
     }
 
     public void SwitchStateTo(CharacterState newState){
@@ -214,13 +226,14 @@ public class Character : MonoBehaviour
                     GetComponent<PlayerVFXManager>().StopBlade();
                 break;
             case CharacterState.Dead:
-                break;
+                return;
+
             case CharacterState.BeingHit:
                 break;
             case CharacterState.Slide:
                 break;
             case CharacterState.Spawn:
-                IsInvincible = false;
+                isInvincible = false;
                 break;
             case CharacterState.Dance:
                 break;
@@ -238,9 +251,10 @@ public class Character : MonoBehaviour
                 }
                 _animator.SetTrigger("Attack");
                 if(isPlayer)
+                {
                     attackStartTime = Time.time;
-
-                AttackAnimationEnds();
+                    //RotateToCursor();
+                }
                 break;
             case CharacterState.Dead:
                 _cc.enabled = false;
@@ -251,7 +265,7 @@ public class Character : MonoBehaviour
                 _animator.SetTrigger("BeingHit");
                 if(isPlayer)
                 {
-                    IsInvincible = true;
+                    isInvincible = true;
                     StartCoroutine(DelayCancelInvincible());
                 }
                 break;
@@ -259,7 +273,7 @@ public class Character : MonoBehaviour
                 _animator.SetTrigger("Slide");
                 break;
             case CharacterState.Spawn:
-                IsInvincible = true;
+                isInvincible = true;
                 currentSpawnTime = SpawnDuration;
                 StartCoroutine(MaterialAppear());
                 break;
@@ -291,7 +305,7 @@ public class Character : MonoBehaviour
 
     public void ApplyDamage(int damage, Vector3 attackerPos = new Vector3())
     {
-        if(IsInvincible && isPlayer)
+        if (isInvincible)
         {
             return;
         }
@@ -305,13 +319,23 @@ public class Character : MonoBehaviour
         }
         StartCoroutine(MaterialBlink());
 
-        float impactForce = 10f;
-        if(!isPlayer)
+        // if(currentState == CharacterState.Dead)
+        //     return;
+        if (isPlayer)
         {
-            impactForce = 1.5f;
+            SwitchStateTo(CharacterState.BeingHit);
+            ApplyImpact(attackerPos, 10f);
         }
-        SwitchStateTo(CharacterState.BeingHit);
-        ApplyImpact(attackerPos,impactForce);
+        else
+        {
+            ApplyImpact(attackerPos, 2.5f);
+        }
+    }
+
+    IEnumerator DelayCancelInvincible()
+    {
+        yield return new WaitForSeconds(invincibleDuration);
+        isInvincible = false;
     }
 
     private void ApplyImpact(Vector3 attackerPos, float force)
@@ -334,12 +358,6 @@ public class Character : MonoBehaviour
         _damageCaster.DisableDamageCaster();
     }
 
-    IEnumerator DelayCancelInvincible()
-    {
-        yield return new WaitForSeconds(InvincibleDuration);
-        IsInvincible = false;
-    }
-
     IEnumerator MaterialBlink()
     {
         _materialPropertyBlock.SetFloat("_blink",0.4f);
@@ -354,13 +372,13 @@ public class Character : MonoBehaviour
 
     IEnumerator MaterialDissolve()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(2);
 
         float dissolveTimeDuration = 2f;
         float currentDissolveTime = 0;
-        float dissolveHeight_start = 20f;
-        float dissolveHeight_end = -10f;
-        float dissolveHeight;
+        float dissolveHight_start = 20f;
+        float dissolveHight_target = -10f;
+        float dissolveHight;
 
         _materialPropertyBlock.SetFloat("_enableDissolve",1f);
         _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
@@ -368,44 +386,54 @@ public class Character : MonoBehaviour
         while(currentDissolveTime < dissolveTimeDuration)
         {
             currentDissolveTime += Time.deltaTime;
-            dissolveHeight = Mathf.Lerp(dissolveHeight_start,dissolveHeight_end,currentDissolveTime / dissolveTimeDuration);
-            _materialPropertyBlock.SetFloat("_dissolve_height",dissolveHeight);
+            dissolveHight = Mathf.Lerp(dissolveHight_start, dissolveHight_target, currentDissolveTime / dissolveTimeDuration);
+            _materialPropertyBlock.SetFloat("_dissolve_height",dissolveHight);
             _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
             yield return null;
         }
 
         DropItem();
-        this.gameObject.SetActive(false);
+        // this.gameObject.SetActive(false);
+    }
+
+    public void DropItem()
+    {
+        if (ItemToDrop != null)
+        {
+            Instantiate(ItemToDrop, transform.position, Quaternion.identity);
+        }
+    }
+
+    public void RotateToTarget()
+    {
+        if (currentState != CharacterState.Dead)
+        {
+            transform.LookAt(targetPlayer, Vector3.up);
+        }
     }
 
     IEnumerator MaterialAppear()
     {
         float dissolveTimeDuration = SpawnDuration;
         float currentDissolveTime = 0;
-        float dissolveHeight_start = -10f;
-        float dissolveHeight_end = 20f;
-        float dissolveHeight;
+        float dissolveHight_start = -10f;
+        float dissolveHight_target = 20f;
+        float dissolveHight;
 
-        _materialPropertyBlock.SetFloat("_enableDissolve",1f);
+        _materialPropertyBlock.SetFloat("_enableDissolve", 1f);
         _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
-        //实现线性的溶解
-        while(currentDissolveTime < dissolveTimeDuration)
+
+        while (currentDissolveTime < dissolveTimeDuration)
         {
             currentDissolveTime += Time.deltaTime;
-            dissolveHeight = Mathf.Lerp(dissolveHeight_start,dissolveHeight_end,currentDissolveTime / dissolveTimeDuration);
-            _materialPropertyBlock.SetFloat("_dissolve_height",dissolveHeight);
+            dissolveHight = Mathf.Lerp(dissolveHight_start, dissolveHight_target, currentDissolveTime / dissolveTimeDuration);
+            _materialPropertyBlock.SetFloat("_dissolve_height", dissolveHight);
             _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
             yield return null;
         }
-    }
 
-    //掉落道具
-    public void DropItem()
-    {
-        if(ItemToDrop != null)
-        {
-            Instantiate(ItemToDrop,transform.position,Quaternion.identity);
-        }
+        _materialPropertyBlock.SetFloat("_enableDissolve", 0f);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
     }
     //拾取道具
     public void PickUpItem(Prop item)
@@ -427,6 +455,18 @@ public class Character : MonoBehaviour
             case Prop.PropType.Coin:
                 AddCoin(item.Value);
                 break;
+        }
+    }
+
+    private void RotateToCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitResult;
+
+        if (Physics.Raycast(ray, out hitResult, 1000, 1 << LayerMask.NameToLayer("CursorTest")))
+        {
+            Vector3 cursorPos = hitResult.point;
+            transform.rotation = Quaternion.LookRotation(cursorPos - transform.position, Vector3.up);
         }
     }
 }
