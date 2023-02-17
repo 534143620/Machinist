@@ -30,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6174038854777058564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.36}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalPosition: {x: -2.24, y: 0, z: -5.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5918907340682992543}
@@ -76,7 +76,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!195 &6174038854777058571
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -114,16 +114,15 @@ MonoBehaviour:
   MoveSpeed: 2
   Gravity: -9.8
   isPlayer: 0
-  targetPlayer: {fileID: 0}
   attackSlideDuration: 0.4
   attackSlideSpeed: 0.06
   SlideSpeed: 9
-  IsInvincible: 0
-  InvincibleDuration: 2
-  attackAnimationDuration: 0
+  isInvincible: 0
+  invincibleDuration: 1
   currentState: 0
   ItemToDrop: {fileID: 4938558680113800579, guid: feb5e1df7bdda44498cef99d3a35c49a, type: 3}
   Coin: 0
+  SpawnDuration: 2
 --- !u!114 &6174038854777058574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,9 +178,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6174038854901838758}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.95833313, z: 1.0749999}
-  m_LocalScale: {x: 0.8333332, y: 0.8333332, z: 0.8333332}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.15, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6174038854777058565}
