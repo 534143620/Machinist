@@ -257,7 +257,7 @@ public class Character : MonoBehaviour
                 if(isPlayer)
                 {
                     attackStartTime = Time.time;
-                    //RotateToCursor();
+                    RotateToCursor();
                 }
                 break;
             case CharacterState.Dead:
