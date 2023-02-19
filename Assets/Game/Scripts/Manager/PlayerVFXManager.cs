@@ -14,6 +14,8 @@ public class PlayerVFXManager : MonoBehaviour
     public VisualEffect Slash;
     public VisualEffect HealVFX;
 
+    public ParticleSystem[] DancingSystem;
+
     public void Update_FootStep(bool state)
     {
         if (state)
@@ -23,6 +25,21 @@ public class PlayerVFXManager : MonoBehaviour
             footStep.Stop();
         }
 
+    }
+
+    public void isPlayerDancingVFX(bool state)
+    {
+        foreach (ParticleSystem system in DancingSystem)
+        {
+            if (state)
+            {
+                system.Play();
+            }
+            else
+            {
+                system.Stop();
+            }
+        }
     }
 
     public void PlayBlade01()

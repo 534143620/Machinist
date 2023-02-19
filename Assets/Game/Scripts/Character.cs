@@ -215,8 +215,7 @@ public class Character : MonoBehaviour
         //clear cache
         if(isPlayer)
         {
-            _playerInput.ClearCache();
-            SoundManager.StopSound();
+            ClearPlayerChache();
         }
         //Exiting state
         switch (currentState)
@@ -284,6 +283,8 @@ public class Character : MonoBehaviour
                 break;
             case CharacterState.Dance:
                 _animator.SetBool("Dance",true);
+                GetComponent<PlayerVFXManager>().isPlayerDancingVFX(true);
+                SoundManager.PlaySound(SoundManager.Sound.PlayerDancingMusic);
                 break;
         }
 
@@ -291,6 +292,13 @@ public class Character : MonoBehaviour
 
         Debug.Log("转换状态" + currentState );
 
+    }
+
+    public void ClearPlayerChache()
+    {
+        _playerInput.ClearCache();
+        SoundManager.StopSound();
+        GetComponent<PlayerVFXManager>().isPlayerDancingVFX(false);
     }
 
     public void AttackAnimationEnds()

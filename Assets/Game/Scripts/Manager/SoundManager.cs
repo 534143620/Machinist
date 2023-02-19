@@ -16,7 +16,8 @@ public static class SoundManager
         ButtonEffect2,
         PropCollect,
         GameWin,
-        GameLost
+        GameLost,
+        PlayerDancingMusic,
     }
     private static Dictionary<Sound,float> soundTimerDictionary; //防止没播放完继续播放
     private static GameObject oneShotGameObject;
