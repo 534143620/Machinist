@@ -10,13 +10,15 @@ public class GameUI_Manager : MonoBehaviour
     public GameManager gameManager;
     public TMPro.TextMeshProUGUI coinText;
     public Slider HealthSlider;
-    private enum GameUI_State{
-        GamePlay,GamePause,GameWin,GameLost
+    public enum GameUI_State{
+        GamePlay,GamePause,GameWin,GameLost,GameMinMap,GameInventory
     }
+
     private GameObject UI_GamePause;
     private GameObject UI_GameWin;
     private GameObject UI_GameLost;
     private GameObject UI_GameMinMap;
+    private GameObject UI_GameInventory;
 
     GameUI_State currentState;
 
@@ -25,6 +27,7 @@ public class GameUI_Manager : MonoBehaviour
         UI_GameWin = transform.Find("UI_GameWin").gameObject;
         UI_GameLost = transform.Find("UI_GameLost").gameObject;
         UI_GameMinMap = transform.Find("UI_GameMinMap").gameObject;
+        UI_GameInventory = transform.Find("UI_Inventory").gameObject;
         SwitchUIState(GameUI_State.GamePlay);
     }
 
@@ -81,8 +84,16 @@ public class GameUI_Manager : MonoBehaviour
         SwitchUIState(GameUI_State.GameWin);
     }
 
-    public void ShowMinMap()
+    public void ShowUI(GameUI_State state)
     {
-        UI_GameMinMap.SetActive(!UI_GameMinMap.activeSelf);
+        GameObject ui = null;
+        if(state == GameUI_State.GameMinMap)
+            ui = UI_GameMinMap;
+        else if(state == GameUI_State.GameInventory)
+            ui = UI_GameInventory;
+        if( ui != null)
+            ui.SetActive(!ui.activeSelf);
+        else
+            Debug.LogError("Invalid GameUI_State!");
     }
 }
