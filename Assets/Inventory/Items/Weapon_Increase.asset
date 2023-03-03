@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377649fabfcfbe1459284c2fcd13bd33, type: 3}
+  m_Name: Weapon_Increase
+  m_EditorClassIdentifier: 
+  item_Name: Weapon_Increase
+  item_Img: {fileID: 21300000, guid: 404ec311168450b4897bd28b222a3008, type: 3}
+  item_Hold: 2
+  item_Info: "[\u6B66\u5668\u953B\u9020\u529F\u80FD\uFF1A\u653B\u51FB\u529B\u503C\u52A010]\n[Weapon
+    forging function: attack value plus 10]"
+  item_value: 10
+  isEquip: 1

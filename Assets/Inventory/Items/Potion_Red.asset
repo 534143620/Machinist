@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377649fabfcfbe1459284c2fcd13bd33, type: 3}
+  m_Name: Potion_Red
+  m_EditorClassIdentifier: 
+  item_Name: Potion_Red
+  item_Img: {fileID: 21300000, guid: 578e03528214ed343b09a0f15adde794, type: 3}
+  item_Hold: 0
+  item_Info: "[\u7EA2\u836F\u6C34\u7684\u529F\u80FD\uFF1A\u751F\u547D\u503C\u52A010]\n[The
+    function of the red potion: add 10 to the life value]"
+  item_value: 10
+  isEquip: 1

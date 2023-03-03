@@ -6,8 +6,10 @@ public class Prop : MonoBehaviour
 {
     public enum PropType
     {
-        Heal,Coin
+        Heal,Coin,Potion_Red,Weapon_Increase
     }
+
+    public Item thisItem; //可以放入背包的道具需要设置
 
     public PropType Type;
     public int Value = 20;

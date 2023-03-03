@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        if(EventSystem.current.IsPointerOverGameObject()) return;
         if(!MouseButtonDown && Time.timeScale != 0)
         {
             MouseButtonDown = Input.GetMouseButtonDown(0);

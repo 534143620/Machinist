@@ -51,6 +51,8 @@ public class Character : MonoBehaviour
     //敌人生成
     public float SpawnDuration = 2.0f;
     private float currentSpawnTime;
+    //我的背包
+    public Inventory playerInventory;
 
     private void Awake() {
         _cc = GetComponent<CharacterController>();
@@ -146,7 +148,7 @@ public class Character : MonoBehaviour
                         //大于等于1表示动画播放完一次了
                         Debug.Log("当前播放的动画 + " + currentClipName);
                         attackAnimationDuration = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-                        if(currentClipName != "LittleAdventurerAndie_ATTACK_03" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
+                        if(currentClipName != "Armature|Attack-3" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
                         {
                             _playerInput.MouseButtonDown = false;
                             SwitchStateTo(CharacterState.Attacking);
@@ -451,7 +453,7 @@ public class Character : MonoBehaviour
         _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
     }
     //拾取道具
-    public void PickUpItem(Prop item)
+    public void PickUpItem(Prop prop)
     {
         void AddHealth(int health)
         {
@@ -462,15 +464,42 @@ public class Character : MonoBehaviour
         {
             Coin += coin;
         }
-        switch (item.Type)
+        switch (prop.Type)
         {
             case Prop.PropType.Heal:
-                AddHealth(item.Value);
+                AddHealth(prop.Value);
                 break;
             case Prop.PropType.Coin:
-                AddCoin(item.Value);
+                AddCoin(prop.Value);
+                break;
+            case Prop.PropType.Potion_Red:
+                PutInInventory(prop.thisItem);
+                break;
+            case Prop.PropType.Weapon_Increase:
+                PutInInventory(prop.thisItem);
                 break;
         }
+    }
+
+    private void PutInInventory(Item item)
+    {
+        if(item == null)
+            return;
+        if(!playerInventory.itemList.Contains(item))
+        {
+            for (int i = 0; i < playerInventory.itemList.Count; i++)
+            {
+                if(playerInventory.itemList[i] == null)
+                {
+                    item.item_Hold += 1;
+                    playerInventory.itemList[i] = item;
+                    break;
+                }
+            }
+        }else{
+            item.item_Hold += 1;
+        }
+        InventoryManager.RefreshItem();
     }
 
     private void RotateToCursor()
